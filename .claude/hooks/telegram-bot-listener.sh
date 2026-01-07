@@ -102,8 +102,9 @@ create_session_topic() {
     local directory="$2"
     local project=$(basename "$directory")
 
-    # Extract timestamp from session name for display
-    local session_short=$(echo "$session_name" | cut -d'_' -f3-4 | cut -c1-8)
+    # Extract IST timestamp and random from session name for display
+    # Format: claude_ec2feb9_260107103534123_42 -> 260107103534123_42
+    local session_short=$(echo "$session_name" | cut -d'_' -f3-4)
     local topic_name="[${MACHINE_SHORT}] ${session_short} @ ${project}"
 
     # Icon colors - blue
@@ -180,11 +181,13 @@ cleanup_session_topic() {
 
 # Session management
 get_session_name() {
-    local timestamp
-    timestamp=$(date +%s)
-    local random_id
-    random_id=$(head -c 4 /dev/urandom | xxd -p)
-    echo "claude_${MACHINE_SHORT}_${timestamp}_${random_id}"
+    # Format: YYMMDDHHMMSSsss (IST timezone) + 2-digit random (10-99)
+    # Example: 260107103534123_42
+    local ist_timestamp
+    ist_timestamp=$(TZ='Asia/Kolkata' date +%y%m%d%H%M%S%3N)
+    local random_2digit
+    random_2digit=$(( (RANDOM % 90) + 10 ))
+    echo "claude_${MACHINE_SHORT}_${ist_timestamp}_${random_2digit}"
 }
 
 list_claude_sessions() {
