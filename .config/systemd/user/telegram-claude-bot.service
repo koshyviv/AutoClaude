@@ -1,0 +1,22 @@
+[Unit]
+Description=Telegram Bot for Claude Code Remote Control
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+Environment="BOT_TOKEN=8339956513:AAEKtFn_r7yQHYrwK-v8t9M_f-GvCUBax2A"
+Environment="ALLOWED_CHAT_ID=-1003289806131"
+Environment="PATH=/home/ubuntu/.local/share/nvm/v22.14.0/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/home/ubuntu/.claude/hooks/telegram-bot-listener.sh
+StandardOutput=append:/home/ubuntu/.claude/hooks/telegram-bot.log
+StandardError=append:/home/ubuntu/.claude/hooks/telegram-bot.log
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,18 @@
+{
+  "alwaysThinkingEnabled": false,
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "AskUserQuestion",
+      "hooks": [{
+        "type": "command",
+        "command": "~/.claude/hooks/telegram-notify.sh question"
+      }]
+    }],
+    "Stop": [{
+      "hooks": [{
+        "type": "command",
+        "command": "~/.claude/hooks/telegram-notify.sh done"
+      }]
+    }]
+  }
+}
